@@ -21,418 +21,538 @@ import {
   Settings2,
   CalendarDays,
   Menu,
-  FileText
+  FileText,
+  X,
+  Camera,
+  Phone,
+  ArrowLeft,
+  Mail,
+  Globe,
+  LogOut,
+  LayoutDashboard,
+  ClipboardList,
+  Contact2,
+  Info,
+  CalendarCheck2,
+  ArrowUpRight,
+  Plus,
 } from "lucide-react";
 
 // --- Institutional Theme Configuration ---
 const THEME = {
-  primary: "#0F172A", // Deep Navy
-  accent: "#D97706",  // Amber Gold
-  bg: "#F8FAFC",      // Ghost White
+  primary: "#1E4BB2", // Royal Blue
+  primaryDark: "#163a8a",
+  bg: "#f3f4f6",      // Light Gray
   surface: "#FFFFFF",
-  muted: "#64748B",   // Slate Gray
-  brand: "Elite Digital Campus"
+  text: "#1e293b",
+  muted: "#64748B",
 };
 
 export default function InstitutionalParentPortal() {
-  const [activeView, setActiveView] = useState("home"); // home, attendance, diary, fees, results, notices
+  const [activeView, setActiveView] = useState("dashboard"); // dashboard, challans, contact, notifications, ...
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [data, setData] = useState<any>(null);
 
   useEffect(() => {
-    // Institutional Data Schema reflecting the Proposal
     const proposalData = {
       student: {
-        name: "Ali Ahmed",
-        id: "EIS-102-2024",
-        class: "Grade 8",
-        section: "A-Blue",
-        avatar: "https://i.pravatar.cc/150?u=ali_ahmed",
-        institution: "High School & College"
+        name: "Amad Khan",
+        id: "173419",
+        campus: "Walton Campus, Lahore",
+        class: "Class 6",
+        section: "Silver",
+        avatar: "https://images.unsplash.com/photo-1544348817-5f2cf14b88c8?w=400&h=400&fit=crop",
       },
       attendance: {
-        presentDays: 22,
-        absentDays: 2,
-        stats: [
-          { day: 1, status: 'present' }, { day: 2, status: 'present' }, { day: 3, status: 'absent' },
-          { day: 4, status: 'present' }, { day: 5, status: 'present' }, { day: 6, status: 'weekend' },
-          { day: 7, status: 'weekend' }, { day: 8, status: 'present' }, { day: 9, status: 'present' },
-          { day: 10, status: 'present' }, { day: 11, status: 'present' }, { day: 12, status: 'absent' },
-          { day: 13, status: 'present' }, { day: 14, status: 'weekend' }, { day: 15, status: 'weekend' },
+        percentage: 92,
+        totalDays: 120,
+        present: 110,
+        absent: 6,
+        leave: 4,
+        monthly: [
+          { day: 1, status: "P" }, { day: 2, status: "P" }, { day: 3, status: "A" },
+          { day: 4, status: "P" }, { day: 5, status: "P" }, { day: 6, status: "L" },
+          { day: 7, status: "P" }, { day: 8, status: "P" }, { day: 9, status: "P" },
+          { day: 10, status: "P" }, { day: 11, status: "P" }, { day: 12, status: "P" },
+          { day: 13, status: "A" }, { day: 14, status: "P" }, { day: 15, status: "P" },
+          { day: 16, status: "P" }, { day: 17, status: "P" }, { day: 18, status: "P" },
         ]
       },
+      testSeries: [
+        { id: 1, subject: "Mathematics", topic: "Algebra & Logic", date: "15 Mar", score: "92/100", status: "Completed" },
+        { id: 2, subject: "Physics", topic: "Thermal Energy", date: "18 Mar", score: "Pending", status: "Upcoming" },
+        { id: 3, subject: "English", topic: "Creative Writing", date: "10 Mar", score: "85/100", status: "Completed" },
+        { id: 4, subject: "Chemistry", topic: "Mole Concept", date: "22 Mar", score: "N/A", status: "Scheduled" },
+      ],
       diary: [
-        { subject: "Mathematics", task: "Solve Exercise 4.2 (Q1 to Q5)", due: "Tomorrow", priority: "High" },
-        { subject: "Physics", task: "Read Chapter 3: Energy Sources", due: "Wed, 15th Mar", priority: "Normal" },
-        { subject: "English", task: "Essay writing: 'Digital Education'", due: "Fri, 17th Mar", priority: "Normal" }
+        { id: 1, date: "13 Mar", subject: "Mathematics", content: "Solve Exercise 4.2 (Q1 to Q5)", priority: "High" },
+        { id: 2, date: "13 Mar", subject: "Physics", content: "Read Chapter 3: Energy Sources", priority: "Medium" },
+        { id: 3, date: "12 Mar", subject: "English", content: "Essay writing: 'Digital Education'", priority: "Low" },
       ],
-      fees: {
-        status: "Pending",
-        pkr: "5,000",
-        month: "March 2026",
-        dueDate: "15-Mar-2026",
-        history: [
-          { month: "February", pkr: "5,000", status: "Paid", date: "05-Feb" },
-          { month: "January", pkr: "5,000", status: "Paid", date: "10-Jan" }
+      timeTable: [
+        { day: "Monday", slots: [{ time: "08:00 - 09:00", subject: "Maths" }, { time: "09:00 - 10:00", subject: "Physics" }, { time: "10:30 - 11:30", subject: "English" }] },
+        { day: "Tuesday", slots: [{ time: "08:00 - 09:00", subject: "Chemistry" }, { time: "09:00 - 10:00", subject: "Biology" }, { time: "10:30 - 11:30", subject: "Computer" }] },
+        { day: "Wednesday", slots: [{ time: "08:00 - 09:00", subject: "Maths" }, { time: "09:00 - 10:00", subject: "Art" }, { time: "10:30 - 11:30", subject: "History" }] },
+      ],
+      notices: [
+        { id: 1, date: "12 Mar", title: "Annual Sports Gala", content: "Scheduled for upcoming Saturday.", type: "Event" },
+        { id: 2, date: "10 Mar", title: "Fee Deadline Extension", content: "Last date for March fees is now 15th.", type: "Urgent" },
+      ],
+      progress: {
+        gpa: "3.85",
+        rank: "5th",
+        subjects: [
+          { name: "Maths", percentage: 95 },
+          { name: "Physics", percentage: 88 },
+          { name: "Chemistry", percentage: 82 },
+          { name: "English", percentage: 90 },
         ]
       },
-      results: [
-        { subject: "Math", marks: 92, grade: "A+", avg: 72 },
-        { subject: "Physics", marks: 88, grade: "A", avg: 75 },
-        { subject: "Chemistry", marks: 85, grade: "A", avg: 68 },
-        { subject: "Computer", marks: 95, grade: "A+", avg: 70 }
+      notifications: [
+        { id: 1, date: "07 Mar", title: "Dear Parents, Finale of Track...", type: "SMS", read: false },
+        { id: 2, date: "03 Mar", title: "Dear Parents, This is to inform...", type: "SMS", read: true },
+        { id: 3, date: "25 Feb", title: "Dispatch SMS Sent", type: "Notification", read: true },
+        { id: 4, date: "23 Feb", title: "Dear Parents, This is to remin...", type: "SMS", read: true },
+        { id: 5, date: "17 Feb", title: "Dear Parents, It has been noti...", type: "SMS", read: true },
       ],
-      noticeboard: [
-        { id: 1, title: "Annual Sports Gala", date: "12 Mar", content: "Scheduled for upcoming Saturday.", type: "Event" },
-        { id: 2, title: "Fee Deadline Extension", date: "10 Mar", content: "Last date for March fees is now 15th.", type: "Urgent" },
-        { id: 3, title: "Morning Assembly Change", date: "08 Mar", content: "Assembly time changed to 7:45 AM.", type: "Announcement" }
+      currentChallans: [
+        { id: 1, month: "Mar 2022 - Mar 2022", amount: "930", status: "Amount Payable" },
+      ],
+      pastChallans: [
+        { id: 3, date: "15 Feb", amount: "1,030", period: "Feb 2022 - Feb 2022", paidOn: "15-Feb-2022" },
+        { id: 4, date: "12 Jan", amount: "930", period: "Jan 2022 - Jan 2022", paidOn: "12-Jan-2022" },
+      ],
+      leaves: [
+        { id: 1, type: "Sick Leave", date: "05 Mar", days: 1, status: "Approved", reason: "Fever" },
+        { id: 2, type: "Casual Leave", date: "10 Mar", days: 2, status: "Approved", reason: "Family Event" },
       ]
     };
     setData(proposalData);
   }, []);
 
-  if (!data) return <div className="h-screen bg-slate-900 flex items-center justify-center text-white font-light tracking-widest">ENCRYPTED LOGIN...</div>;
+  if (!data) return <div className="h-screen bg-white flex items-center justify-center text-primary font-bold animate-pulse">LOADING...</div>;
 
-  // --- Header Component (Section 4) ---
-  const Header = () => (
-    <div className="bg-white px-6 pt-8 pb-6 rounded-b-[40px] shadow-sm border-b border-slate-100 flex items-center gap-5 relative z-20">
-      <div className="relative">
-        <div className="w-20 h-20 rounded-3xl border-4 border-slate-50 overflow-hidden shadow-xl shadow-slate-200 ring-1 ring-slate-100">
-          <img src={data.student.avatar} alt="Profile" className="w-full h-full object-cover grayscale-[0.2] hover:grayscale-0 transition-all duration-500" />
-        </div>
-        <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-amber-500 rounded-2xl flex items-center justify-center text-white border-4 border-white shadow-lg">
-          <ShieldCheck size={16} />
-        </div>
+  // --- Shared Header Component ---
+  const Header = ({ title, showBack = false }: { title?: string, showBack?: boolean }) => (
+    <div className="relative bg-[#1E4BB2] pt-12 pb-24 px-6 rounded-b-[40px] shadow-lg">
+      <div className="flex items-center justify-between text-white mb-4">
+        {showBack ? (
+          <button onClick={() => setActiveView("dashboard")} className="p-1">
+            <ArrowLeft size={24} />
+          </button>
+        ) : (
+          <div className="w-6"></div>
+        )}
+        <h1 className="text-lg font-bold">{title || "Student Profile"}</h1>
+        {!showBack && (
+          <button onClick={() => setIsMenuOpen(true)} className="p-1">
+            <Menu size={24} />
+          </button>
+        )}
+        {showBack && <div className="w-6"></div>}
       </div>
-      <div className="flex-1">
-        <h2 className="text-xl font-black text-slate-950 tracking-tight">{data.student.name}</h2>
-        <div className="flex flex-wrap gap-x-3 gap-y-1 mt-1">
-          <span className="text-[11px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-md uppercase tracking-wide">{data.student.class}</span>
-          <span className="text-[11px] font-medium text-slate-400">Sec: {data.student.section}</span>
-          <span className="text-[11px] font-medium text-slate-400">ID: {data.student.id}</span>
+      
+      {activeView === "dashboard" && (
+        <div className="absolute -bottom-16 left-6 right-6 bg-white rounded-2xl p-4 shadow-xl flex items-center gap-4 border border-gray-100">
+          <div className="relative">
+            <div className="w-20 h-20 rounded-xl overflow-hidden border-2 border-[#1E4BB2]">
+              <img src={data.student.avatar} alt="Student" className="w-full h-full object-cover" />
+            </div>
+            <button className="absolute -bottom-1 -right-1 bg-white p-1 rounded-full shadow-md border border-gray-100 text-[#1E4BB2]">
+              <Camera size={14} />
+            </button>
+          </div>
+          <div className="flex-1">
+            <h2 className="text-lg font-bold text-[#1E4BB2]">{data.student.name}</h2>
+            <div className="space-y-0.5">
+              <p className="text-[12px] font-bold text-gray-500">{data.student.id}</p>
+              <p className="text-[12px] text-gray-400 font-medium">{data.student.campus}</p>
+              <p className="text-[12px] text-gray-400 font-medium">{data.student.class} - {data.student.section}</p>
+            </div>
+          </div>
         </div>
-        <p className="text-[10px] items-center gap-1 font-bold text-amber-600 uppercase mt-2 opacity-80 flex">
-          <MapPin size={10} /> {data.student.institution}
-        </p>
-      </div>
-      <button className="p-3 bg-slate-50 rounded-2xl text-slate-400 hover:text-slate-900 transition-colors">
-        <Settings2 size={24} />
-      </button>
+      )}
     </div>
   );
 
-  // --- View Components ---
-  const HomeView = () => (
-    <div className="p-6 space-y-8 animate-in fade-in duration-500">
-      {/* 4 Large Primary Grid Buttons (Section 4) */}
-      <div className="grid grid-cols-2 gap-4">
+  // --- Side Menu Component ---
+  const SideMenu = () => (
+    <div className={`fixed inset-0 z-[100] transition-opacity duration-300 ${isMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"}`}>
+      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setIsMenuOpen(false)}></div>
+      <div className={`absolute top-0 right-0 h-full w-4/5 max-w-sm bg-white shadow-2xl transition-transform duration-300 transform ${isMenuOpen ? "translate-x-0" : "translate-x-full"}`}>
+        <div className="p-6 border-b border-gray-100 flex justify-between items-center">
+          <h2 className="text-xl font-bold text-[#1E4BB2]">Menu</h2>
+          <button onClick={() => setIsMenuOpen(false)} className="p-2 text-gray-400">
+            <X size={24} />
+          </button>
+        </div>
+        <div className="overflow-y-auto h-[calc(100%-80px)] py-4">
+          {[
+            { id: "dashboard", label: "Home", icon: LayoutDashboard },
+            { id: "attendance", label: "Attendance", icon: CalendarCheck2 },
+            { id: "testSeries", label: "Test Series", icon: ClipboardList },
+            { id: "diary", label: "Diary", icon: BookOpen },
+            { id: "timeTable", label: "Time Table", icon: Clock },
+            { id: "noticeBoard", label: "Notice Board", icon: Bell },
+            { id: "leaves", label: "Leaves", icon: CalendarDays },
+            { id: "challans", label: "Challans", icon: CreditCard },
+            { id: "progress", label: "Progress", icon: TrendingUp },
+            { id: "contact", label: "Contact Us", icon: Phone },
+            { id: "logout", label: "Logout", icon: LogOut, color: "text-red-500" },
+          ].map((item) => (
+            <button
+              key={item.id}
+              onClick={() => {
+                if (item.id !== "logout") setActiveView(item.id);
+                setIsMenuOpen(false);
+              }}
+              className={`w-full flex items-center gap-4 px-6 py-4 hover:bg-gray-50 transition-colors ${item.color || "text-gray-600"}`}
+            >
+              <item.icon size={20} className={activeView === item.id ? "text-[#1E4BB2]" : ""} />
+              <span className={`text-sm font-medium ${activeView === item.id ? "text-[#1E4BB2] font-bold" : ""}`}>{item.label}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+
+  // --- Feature Pages ---
+  const Dashboard = () => (
+    <div className="pb-24">
+      <Header />
+      <div className="px-6 pt-20 space-y-8">
+        <div className="space-y-4">
+          <h3 className="text-sm font-bold text-gray-400 uppercase tracking-widest px-1">Features</h3>
+          <div className="relative group">
+            <div className="flex gap-4 overflow-x-auto scrollbar-hide pb-2 -mx-6 px-6 snap-x snap-mandatory">
+              {[
+                { id: "attendance", label: "Attendance", icon: CalendarDays },
+                { id: "testSeries", label: "Test Series", icon: ClipboardList },
+                { id: "diary", label: "Diary", icon: BookOpen },
+                { id: "timeTable", label: "Time Table", icon: Clock },
+                { id: "noticeBoard", label: "Notice Board", icon: Bell },
+                { id: "leaves", label: "Leaves", icon: CalendarDays },
+                { id: "challans", label: "Challans", icon: FileText },
+                { id: "progress", label: "Progress", icon: TrendingUp },
+              ].map((btn) => (
+                <button
+                  key={btn.id}
+                  onClick={() => setActiveView(btn.id)}
+                  className="flex flex-col items-center gap-2 min-w-[100px] snap-center group"
+                >
+                  <div className="w-full aspect-square bg-white rounded-3xl shadow-sm border border-gray-100 flex items-center justify-center p-6 active:scale-95 transition-transform group-hover:border-primary/20">
+                    <btn.icon size={36} className="text-[#1E4BB2]" strokeWidth={1.5} />
+                  </div>
+                  <span className="text-[11px] font-bold text-gray-500 group-hover:text-[#1E4BB2] transition-colors">{btn.label}</span>
+                </button>
+              ))}
+            </div>
+            <div className="flex justify-center gap-1.5 mt-2">
+              {[0, 1, 2].map((i) => (
+                <div key={i} className={`w-1.5 h-1.5 rounded-full ${i === 0 ? "bg-[#1E4BB2] w-4" : "bg-gray-200"}`}></div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="space-y-4">
+          <div className="flex items-center justify-between border-b-2 border-[#1E4BB2] pb-2">
+            <h3 className="text-sm font-bold text-[#1E4BB2]">Recent Notifications</h3>
+            <button onClick={() => setActiveView("notifications")} className="text-[12px] font-bold text-[#1E4BB2] flex items-center gap-1">
+              View All <ChevronRight size={14} />
+            </button>
+          </div>
+          <div className="space-y-0 divide-y divide-gray-100">
+            {data.notifications.slice(0, 3).map((n: any) => (
+              <button key={n.id} className="w-full flex items-center gap-4 py-4 group" onClick={() => setActiveView("notifications")}>
+                <div className="w-12 h-12 rounded-full border border-[#1E4BB2] flex flex-col items-center justify-center min-w-[48px] group-hover:bg-[#1E4BB2] group-hover:text-white transition-colors duration-300">
+                  <span className="text-[9px] font-bold uppercase">{n.date.split(' ')[0]}</span>
+                  <span className="text-[9px] font-bold">{n.date.split(' ')[1]}</span>
+                </div>
+                <div className="flex-1 text-left">
+                  <p className="text-sm font-medium text-gray-700 line-clamp-1">{n.title}</p>
+                </div>
+                <ChevronRight size={18} className="text-[#1E4BB2] opacity-50" />
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  const AttendancePage = () => (
+    <div className="pb-24">
+      <Header title="Attendance" showBack />
+      <div className="px-6 pt-20 space-y-6">
+        <div className="grid grid-cols-2 gap-4">
+          <div className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 text-center">
+            <p className="text-[10px] font-bold text-gray-400 uppercase">Rate</p>
+            <p className="text-2xl font-bold text-[#1E4BB2]">{data.attendance.percentage}%</p>
+          </div>
+          <div className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 text-center">
+            <p className="text-[10px] font-bold text-gray-400 uppercase">Absents</p>
+            <p className="text-2xl font-bold text-red-500">{data.attendance.absent}</p>
+          </div>
+        </div>
+        <div className="bg-white p-6 rounded-[32px] shadow-sm border border-gray-100">
+           <h3 className="text-lg font-bold mb-6">March 2026</h3>
+           <div className="grid grid-cols-7 gap-4">
+              {['M', 'T', 'W', 'T', 'F', 'S', 'S'].map(d => <span key={d} className="text-[10px] font-bold text-gray-300 text-center">{d}</span>)}
+              {data.attendance.monthly.map((m: any) => (
+                <div key={m.day} className="flex flex-col items-center gap-1">
+                  <span className="text-[9px] font-bold text-gray-300">{m.day}</span>
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-[10px] font-bold ${m.status === 'P' ? 'bg-[#1E4BB2]/10 text-[#1E4BB2]' : 'bg-red-50 text-red-500'}`}>
+                    {m.status}
+                  </div>
+                </div>
+              ))}
+           </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  const TestSeriesPage = () => (
+    <div className="pb-24">
+      <Header title="Test Series" showBack />
+      <div className="px-6 pt-20 space-y-4">
+        {data.testSeries.map((t: any) => (
+          <div key={t.id} className="bg-white p-5 rounded-3xl shadow-sm border border-gray-100 flex items-center justify-between">
+            <div>
+              <p className="text-xs font-bold text-[#1E4BB2]">{t.date}</p>
+              <h4 className="text-lg font-bold text-gray-800">{t.subject}</h4>
+              <p className="text-xs text-gray-400 font-medium">{t.topic}</p>
+            </div>
+            <div className="text-right">
+              <span className={`px-2 py-1 rounded-lg text-[9px] font-bold uppercase ${t.status === 'Completed' ? 'bg-green-50 text-green-600' : 'bg-blue-50 text-primary'}`}>{t.status}</span>
+              <p className="text-lg font-bold text-gray-800 mt-1">{t.score}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+
+  const DiaryPage = () => (
+    <div className="pb-24">
+      <Header title="Diary" showBack />
+      <div className="px-6 pt-20 space-y-4">
+        {data.diary.map((d: any) => (
+          <div key={d.id} className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 relative overflow-hidden">
+            <div className={`absolute left-0 top-0 bottom-0 w-1 ${d.priority === 'High' ? 'bg-red-500' : 'bg-[#1E4BB2]'}`}></div>
+            <p className="text-xs font-bold text-[#1E4BB2] mb-1">{d.date} • {d.subject}</p>
+            <p className="text-sm text-gray-600 italic">"{d.content}"</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+
+  const TimeTablePage = () => (
+    <div className="pb-24">
+      <Header title="Time Table" showBack />
+      <div className="px-6 pt-20 space-y-8">
+        {data.timeTable.map((day: any) => (
+          <div key={day.day} className="space-y-4">
+            <h3 className="text-sm font-bold text-[#1E4BB2] border-b-2 border-[#1E4BB2] pb-1 inline-block">{day.day}</h3>
+            <div className="bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-100">
+               {day.slots.map((s: any, i: number) => (
+                  <div key={i} className="p-4 flex justify-between items-center border-b border-gray-50 last:border-0">
+                    <div>
+                      <p className="text-sm font-bold text-gray-800">{s.subject}</p>
+                      <p className="text-xs text-gray-400">{s.time}</p>
+                    </div>
+                    <Clock size={16} className="text-gray-200" />
+                  </div>
+               ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+
+  const NoticeBoardPage = () => (
+    <div className="pb-24">
+      <Header title="Notice Board" showBack />
+      <div className="px-6 pt-20 space-y-4">
+        {data.notices.map((n: any) => (
+          <div key={n.id} className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
+            <span className={`text-[9px] font-bold px-2 py-1 rounded-lg uppercase ${n.type === 'Urgent' ? 'bg-red-50 text-red-500' : 'bg-primary/10 text-primary'}`}>{n.type}</span>
+            <h4 className="text-md font-bold text-gray-800 mt-2">{n.title}</h4>
+            <p className="text-xs text-gray-500 mt-1">{n.content}</p>
+            <p className="text-[10px] text-gray-300 mt-4 font-bold">{n.date}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+
+  const ProgressPage = () => (
+    <div className="pb-24">
+      <Header title="Progress" showBack />
+      <div className="px-6 pt-20 space-y-6">
+        <div className="bg-linear-to-r from-[#1E4BB2] to-[#163a8a] p-8 rounded-[40px] text-white shadow-xl flex items-center justify-between">
+          <div>
+            <p className="text-[10px] font-bold uppercase opacity-70">Current Performance</p>
+            <h4 className="text-4xl font-bold">{data.progress.gpa} GPA</h4>
+            <p className="text-sm opacity-80 mt-1">Rank: {data.progress.rank}</p>
+          </div>
+          <TrendingUp size={48} className="opacity-20" />
+        </div>
+        <div className="space-y-4">
+          <h3 className="text-sm font-bold text-[#1E4BB2]">Subject Analysis</h3>
+          {data.progress.subjects.map((s: any) => (
+            <div key={s.name} className="bg-white p-5 rounded-3xl shadow-sm border border-gray-100">
+               <div className="flex justify-between text-sm font-bold mb-2">
+                 <span>{s.name}</span>
+                 <span>{s.percentage}%</span>
+               </div>
+               <div className="w-full h-1.5 bg-gray-50 rounded-full overflow-hidden">
+                 <div className="h-full bg-[#1E4BB2]" style={{ width: `${s.percentage}%` }}></div>
+               </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+
+  const LeavesPage = () => (
+    <div className="pb-24">
+      <Header title="Leaves" showBack />
+      <div className="px-6 pt-20 space-y-6">
+        <div className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 flex items-center justify-between">
+          <div>
+            <h3 className="text-sm font-bold text-gray-800">Apply for Leave</h3>
+            <p className="text-xs text-gray-400">Request permission online</p>
+          </div>
+          <button onClick={() => alert("Leave applied!")} className="w-12 h-12 bg-[#1E4BB2] text-white rounded-2xl flex items-center justify-center">
+            <Plus size={24} />
+          </button>
+        </div>
+        <div className="space-y-4">
+          <h3 className="text-sm font-bold text-[#1E4BB2]">Leave History</h3>
+          {data.leaves.map((l: any) => (
+            <div key={l.id} className="bg-white p-5 rounded-3xl shadow-sm border border-gray-100 flex justify-between items-center">
+              <div>
+                <p className="text-xs font-bold text-[#1E4BB2]">{l.type}</p>
+                <h4 className="text-lg font-bold text-gray-800">{l.date}</h4>
+                <p className="text-xs text-gray-400">{l.reason}</p>
+              </div>
+              <span className="px-3 py-1 bg-green-50 text-green-600 text-[10px] font-bold rounded-lg">{l.status}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+
+  const NotificationsPage = () => (
+    <div className="pb-24">
+      <Header title="Notifications" showBack />
+      <div className="px-6 pt-20 space-y-4">
+        {data.notifications.map((n: any) => (
+          <div key={n.id} className="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex items-center gap-4">
+             <div className="text-xs font-bold text-[#1E4BB2] min-w-[50px]">{n.date}</div>
+             <div className="flex-1">
+               <p className="text-sm font-medium text-gray-700">{n.title}</p>
+               <p className="text-[10px] text-gray-400">{n.type}</p>
+             </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+
+  const ChallansPage = () => (
+    <div className="pb-24">
+      <Header title="Challans" showBack />
+      <div className="px-6 pt-20 space-y-8">
+        <div className="bg-white rounded-2xl p-4 shadow-xl flex items-center gap-4 border border-gray-100">
+          <div className="w-20 h-20 rounded-xl overflow-hidden border-2 border-[#1E4BB2]">
+            <img src={data.student.avatar} alt="Student" className="w-full h-full object-cover" />
+          </div>
+          <div className="flex-1">
+            <h2 className="text-lg font-bold text-[#1E4BB2]">{data.student.name}</h2>
+            <p className="text-[12px] font-bold text-gray-500">{data.student.id}</p>
+          </div>
+        </div>
+        <div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100">
+          <h3 className="text-sm font-bold text-[#1E4BB2] mb-4">Current Monthly Fee</h3>
+          <div className="flex justify-between items-center bg-gray-50 p-4 rounded-2xl">
+             <div>
+               <p className="text-xl font-bold text-gray-800">Rs {data.currentChallans[0].amount}/-</p>
+               <p className="text-xs text-gray-400">{data.currentChallans[0].month}</p>
+             </div>
+             <button className="bg-[#1E4BB2] text-white px-4 py-2 rounded-xl text-xs font-bold">Pay Now</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  const ContactPage = () => (
+    <div className="pb-24">
+      <Header title="Contact Us" showBack />
+      <div className="px-6 pt-20 space-y-6">
+        <div className="bg-white p-6 rounded-[32px] border border-gray-100 space-y-4">
+          <input className="w-full bg-gray-50 border-0 rounded-2xl px-6 py-4 text-sm" placeholder="Subject" />
+          <textarea className="w-full bg-gray-50 border-0 rounded-2xl px-6 py-4 text-sm min-h-[150px]" placeholder="Your remarks here..." />
+          <button className="w-full bg-[#1E4BB2] text-white py-4 rounded-2xl font-bold">Submit Complaint</button>
+        </div>
+      </div>
+    </div>
+  );
+
+  const BottomNav = () => (
+    <div className="fixed bottom-6 left-6 right-6 z-50">
+      <div className="bg-white rounded-[40px] shadow-2xl border border-gray-100 p-2 flex items-center justify-between">
         {[
-          { id: 'attendance', label: 'Attendance', icon: CalendarDays, color: 'emerald', detail: '94% Presence' },
-          { id: 'diary', label: 'Daily Diary', icon: BookOpen, color: 'indigo', detail: '3 Tasks Pending' },
-          { id: 'fees', label: 'Fee Status', icon: CreditCard, color: 'rose', detail: 'PKR 5,000 Due' },
-          { id: 'results', label: 'Results', icon: BarChart3, color: 'amber', detail: 'Term 2 Active' }
+          { id: "notifications", label: "Alerts", icon: Bell },
+          { id: "dashboard", label: "Profile", icon: User, special: true },
+          { id: "contact", label: "Contact", icon: Phone },
         ].map((item) => (
           <button
             key={item.id}
             onClick={() => setActiveView(item.id)}
-            className="bg-white p-5 rounded-[32px] border border-slate-100 shadow-[0_10px_30px_-15px_rgba(0,0,0,0.05)] hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] transition-all group flex flex-col items-start text-left active:scale-[0.98]"
+            className={`flex flex-col items-center justify-center transition-all duration-300 ${item.special ? "-top-6 relative" : "flex-1"}`}
           >
-            <div className={`p-3 rounded-2xl mb-4 group-hover:scale-110 transition-transform bg-${item.color}-50 text-${item.color}-600`}>
-              <item.icon size={28} />
-            </div>
-            <p className="font-black text-slate-900 text-sm tracking-tight">{item.label}</p>
-            <p className={`text-[10px] font-bold text-${item.color}-600/70 mt-1 uppercase tracking-wider`}>{item.detail}</p>
+            {item.special ? (
+              <div className={`w-16 h-16 rounded-full flex items-center justify-center shadow-lg transition-transform ${activeView === "dashboard" ? "bg-[#1E4BB2] text-white scale-110" : "bg-white text-gray-400"}`}>
+                <item.icon size={32} />
+              </div>
+            ) : (
+              <div className={`flex flex-col items-center ${activeView === item.id ? "text-[#1E4BB2]" : "text-gray-400"}`}>
+                <item.icon size={22} />
+                <span className="text-[9px] font-bold mt-1">{item.label}</span>
+              </div>
+            )}
           </button>
-        ))}
-      </div>
-
-      {/* Quick Live Preview: Transparency Focus */}
-      <div className="bg-slate-950 rounded-[40px] p-8 text-white relative overflow-hidden shadow-2xl">
-        <div className="relative z-10">
-          <div className="flex justify-between items-center mb-6">
-            <h3 className="text-xs font-black text-slate-500 uppercase tracking-[0.2em]">Institutional Sync</h3>
-            <span className="w-2 h-2 bg-emerald-500 rounded-full animate-ping"></span>
-          </div>
-          <div className="flex items-center gap-5">
-            <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center">
-              <Clock size={24} className="text-amber-500" />
-            </div>
-            <div>
-              <p className="text-xl font-black text-white">08:12 AM</p>
-              <p className="text-xs text-slate-400 font-medium tracking-wide">Campus Entry Logged • North Gate</p>
-            </div>
-          </div>
-          <div className="mt-8 flex gap-3">
-             <div className="flex-1 bg-white/5 p-3 rounded-2xl border border-white/5 text-center">
-                <p className="text-[10px] text-slate-500 uppercase font-black">Next Class</p>
-                <p className="text-xs font-bold mt-1">Physics (Lab)</p>
-             </div>
-             <div className="flex-1 bg-white/5 p-3 rounded-2xl border border-white/5 text-center">
-                <p className="text-[10px] text-slate-500 uppercase font-black">Teacher</p>
-                <p className="text-xs font-bold mt-1">Mr. Ali Khan</p>
-             </div>
-          </div>
-        </div>
-        {/* Aesthetic Gradients */}
-        <div className="absolute -top-10 -right-10 w-40 h-40 bg-indigo-500/20 rounded-full blur-3xl"></div>
-      </div>
-    </div>
-  );
-
-  const AttendanceView = () => (
-    <div className="p-6 space-y-6 animate-in slide-in-from-right-4 duration-500">
-      <div className="flex items-center justify-between">
-         <button onClick={() => setActiveView("home")} className="p-2 text-slate-400 bg-white rounded-xl shadow-sm border border-slate-100">
-            <ChevronRight size={20} className="rotate-180" />
-         </button>
-         <h3 className="text-sm font-black text-slate-900 uppercase tracking-widest">Attendance Registry</h3>
-         <div className="w-10"></div>
-      </div>
-      
-      {/* Calendar Grid with Dots (Section 4) */}
-      <div className="bg-white rounded-[32px] p-6 shadow-sm border border-slate-100">
-        <div className="flex justify-between items-center mb-6">
-          <p className="text-lg font-black text-slate-900">March 2026</p>
-          <div className="flex gap-4 text-[10px] font-bold uppercase tracking-widest">
-             <div className="flex items-center gap-1.5"><div className="w-2 h-2 bg-emerald-500 rounded-full"></div> Present</div>
-             <div className="flex items-center gap-1.5"><div className="w-2 h-2 bg-rose-500 rounded-full"></div> Absent</div>
-          </div>
-        </div>
-        <div className="grid grid-cols-7 gap-y-4 gap-x-2">
-          {['M', 'T', 'W', 'T', 'F', 'S', 'S'].map(d => (
-            <span key={d} className="text-[10px] font-black text-slate-300 text-center uppercase">{d}</span>
-          ))}
-          {data.attendance.stats.map((day: any) => (
-            <div key={day.day} className="flex flex-col items-center gap-1.5">
-               <span className="text-xs font-bold text-slate-400">{day.day}</span>
-               <div className={`w-2.5 h-2.5 rounded-full ${day.status === 'present' ? 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.3)]' : day.status === 'absent' ? 'bg-rose-500 shadow-[0_0_8px_rgba(244,63,94,0.3)]' : 'bg-slate-100 opacity-0'}`}></div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div className="grid grid-cols-2 gap-4">
-         <div className="bg-emerald-50 p-5 rounded-3xl border border-emerald-100">
-            <p className="text-[10px] font-black text-emerald-900 uppercase">Total Present</p>
-            <p className="text-2xl font-black text-emerald-600 mt-1">{data.attendance.presentDays}</p>
-         </div>
-         <div className="bg-rose-50 p-5 rounded-3xl border border-rose-100">
-            <p className="text-[10px] font-black text-rose-900 uppercase">Total Bunks/Absents</p>
-            <p className="text-2xl font-black text-rose-600 mt-1">{data.attendance.absentDays}</p>
-         </div>
-      </div>
-    </div>
-  );
-
-  const FeesView = () => (
-    <div className="p-6 space-y-6 animate-in slide-in-from-right-4 duration-500">
-      <div className="flex items-center justify-between mb-2">
-         <button onClick={() => setActiveView("home")} className="p-2 text-slate-400 bg-white rounded-xl shadow-sm border border-slate-100">
-            <ChevronRight size={20} className="rotate-180" />
-         </button>
-         <h3 className="text-sm font-black text-slate-900 uppercase tracking-widest">Financial Portal</h3>
-         <div className="w-10"></div>
-      </div>
-
-      {/* Bold Fee Status Card (Section 4) */}
-      <div className="bg-rose-600 rounded-[40px] p-8 text-white shadow-2xl shadow-rose-200 relative overflow-hidden">
-        <div className="relative z-10">
-           <div className="flex justify-between items-start mb-4">
-              <span className="bg-white/20 backdrop-blur-md text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full border border-white/20">Action Required</span>
-              <FileText size={24} className="opacity-70" />
-           </div>
-           <p className="text-xs font-bold text-rose-200 uppercase tracking-wider">{data.fees.month} Tuition Fee</p>
-           <h4 className="text-5xl font-black mt-2 tracking-tighter">PKR {data.fees.pkr}</h4>
-           <div className="mt-8 flex items-center justify-between">
-              <div>
-                <p className="text-[10px] font-bold text-rose-200 opacity-80 uppercase">Due Date</p>
-                <p className="text-sm font-black">{data.fees.dueDate}</p>
-              </div>
-              <button className="bg-white text-rose-600 px-6 py-3 rounded-2xl font-black text-xs uppercase tracking-widest shadow-lg hover:scale-105 transition-all">
-                Pay Now
-              </button>
-           </div>
-        </div>
-        <div className="absolute -bottom-20 -right-20 w-56 h-56 bg-white/10 rounded-full blur-3xl"></div>
-      </div>
-
-      <button className="w-full flex items-center justify-between bg-white px-6 py-5 rounded-3xl border border-slate-100 shadow-sm group">
-         <div className="flex items-center gap-4">
-            <div className="p-3 bg-slate-950 text-white rounded-2xl group-hover:rotate-12 transition-transform">
-               <Download size={20} />
-            </div>
-            <p className="font-black text-slate-900 text-sm">Download Challan Voucher</p>
-         </div>
-         <ChevronRight size={20} className="text-slate-300" />
-      </button>
-
-      <div className="space-y-4 pt-4">
-         <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] px-2">Recent Transactions</h4>
-         {data.fees.history.map((h: any, idx: number) => (
-           <div key={idx} className="bg-white p-4 rounded-2xl border border-slate-50 flex items-center justify-between group">
-              <div className="flex items-center gap-4">
-                 <div className="w-10 h-10 bg-emerald-50 text-emerald-500 rounded-xl flex items-center justify-center">
-                    <CheckCircle2 size={20} />
-                 </div>
-                 <div>
-                    <p className="text-xs font-black text-slate-900">{h.month} Fee</p>
-                    <p className="text-[10px] text-slate-400 font-medium">Cleared on {h.date}</p>
-                 </div>
-              </div>
-              <p className="text-xs font-black text-slate-600">PKR {h.pkr}</p>
-           </div>
-         ))}
-      </div>
-    </div>
-  );
-
-  const ResultsView = () => (
-    <div className="p-6 space-y-6 animate-in slide-in-from-right-4 duration-500">
-      <div className="flex items-center justify-between">
-         <button onClick={() => setActiveView("home")} className="p-2 text-slate-400 bg-white rounded-xl shadow-sm border border-slate-100">
-            <ChevronRight size={20} className="rotate-180" />
-         </button>
-         <h3 className="text-sm font-black text-slate-900 uppercase tracking-widest">Academic Transcript</h3>
-         <div className="w-10"></div>
-      </div>
-
-      <div className="bg-white p-6 rounded-[32px] border border-slate-100 shadow-sm text-center">
-         <TrendingUp size={32} className="mx-auto text-amber-500 mb-2" />
-         <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Global Status</p>
-         <h4 className="text-2xl font-black text-slate-950 mt-1">Exceptional Growth</h4>
-      </div>
-
-      <div className="space-y-4">
-        {data.results.map((r: any, idx: number) => (
-          <div key={idx} className="bg-white p-5 rounded-3xl border border-slate-100 flex flex-col gap-4">
-             <div className="flex justify-between items-center">
-                <div className="flex items-center gap-4">
-                   <div className="w-10 h-10 bg-slate-950 text-white rounded-xl flex items-center justify-center font-black text-sm">{r.subject[0]}</div>
-                   <p className="text-sm font-black text-slate-900">{r.subject}</p>
-                </div>
-                <div className="bg-slate-50 px-3 py-1 rounded-lg">
-                   <p className="text-lg font-black text-slate-950">{r.marks}<span className="text-[10px] text-slate-300 ml-1">/100</span></p>
-                </div>
-             </div>
-             <div className="space-y-2">
-                <div className="flex justify-between text-[9px] font-black uppercase text-slate-400">
-                   <span>Performance Index</span>
-                   <span>Grade: {r.grade}</span>
-                </div>
-                <div className="relative h-2 w-full bg-slate-100 rounded-full overflow-hidden">
-                   <div className="absolute top-0 left-0 bottom-0 bg-amber-500 rounded-full shadow-[0_0_10px_rgba(217,119,6,0.2)]" style={{ width: `${r.marks}%` }}></div>
-                   <div className="absolute top-0 bottom-0 w-0.5 bg-slate-300 z-10" style={{ left: `${r.avg}%` }}></div>
-                </div>
-             </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-
-  // --- Announcements Tab (Section 4) ---
-  const NoticesView = () => (
-    <div className="p-6 space-y-6 animate-in fade-in duration-500">
-      <h3 className="text-sm font-black text-slate-900 uppercase tracking-widest border-b border-slate-100 pb-4">Chronological Feed</h3>
-      <div className="space-y-6">
-        {data.noticeboard.map((n: any) => (
-          <div key={n.id} className="relative pl-8 border-l-2 border-slate-100 group">
-             <div className={`absolute -left-[9px] top-0 w-4 h-4 rounded-full border-4 border-white shadow-md ${n.type === 'Urgent' ? 'bg-rose-500' : 'bg-slate-950'}`}></div>
-             <div className="bg-white p-5 rounded-[28px] border border-slate-100 shadow-sm group-hover:shadow-md transition-shadow">
-               <div className="flex justify-between items-start mb-2">
-                  <span className={`text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded-md ${n.type === 'Urgent' ? 'bg-rose-50 text-rose-600' : 'bg-slate-100 text-slate-500'}`}>
-                    {n.type}
-                  </span>
-                  <p className="text-[10px] font-bold text-slate-400">{n.date}</p>
-               </div>
-               <h4 className="text-sm font-black text-slate-950">{n.title}</h4>
-               <p className="text-xs text-slate-500 font-medium mt-1 leading-relaxed">{n.content}</p>
-             </div>
-          </div>
         ))}
       </div>
     </div>
   );
 
   return (
-    <div className="max-w-md mx-auto h-screen bg-[#F8FAFC] flex flex-col relative overflow-hidden text-slate-950 selection:bg-amber-100">
-      {/* Device Top Bar Mock */}
-      <div className="h-10 bg-white flex justify-between items-center px-8 z-30">
-        <span className="text-[12px] font-black tracking-tighter">09:41</span>
-        <div className="flex gap-1.5 items-center">
-          <div className="w-1.5 h-1.5 bg-slate-900 rounded-full"></div>
-          <div className="w-1.5 h-1.5 bg-slate-900 rounded-full"></div>
-          <div className="w-4 h-2 bg-slate-900 rounded-[2px]"></div>
-        </div>
-      </div>
-
-      {activeView === "home" && <Header />}
-
-      <main className="flex-1 overflow-y-auto pb-32 scrollbar-hide">
-        {activeView === "home" && <HomeView />}
-        {activeView === "attendance" && <AttendanceView />}
-        {activeView === "fees" && <FeesView />}
-        {activeView === "results" && <ResultsView />}
-        {activeView === "notices" && <NoticesView />}
-        
-        {/* Placeholder for Diary items in the special view */}
-        {activeView === "diary" && (
-          <div className="p-6 space-y-6 animate-in slide-in-from-right-4 duration-500">
-            <div className="flex items-center justify-between">
-              <button onClick={() => setActiveView("home")} className="p-2 text-slate-400 bg-white rounded-xl shadow-sm border border-slate-100">
-                  <ChevronRight size={20} className="rotate-180" />
-              </button>
-              <h3 className="text-sm font-black text-slate-900 uppercase tracking-widest">Digital Diary</h3>
-              <div className="w-10"></div>
-            </div>
-            
-            <div className="space-y-4">
-              {data.diary.map((d: any, idx: number) => (
-                <div key={idx} className="bg-white p-5 rounded-[32px] border border-slate-100 shadow-sm relative overflow-hidden group">
-                   <div className={`absolute top-0 left-0 bottom-0 w-1.5 ${d.priority === 'High' ? 'bg-rose-500' : 'bg-indigo-500'}`}></div>
-                   <div className="flex justify-between items-start mb-3">
-                      <p className="text-xs font-black text-slate-900 uppercase tracking-wider">{d.subject}</p>
-                      <span className="text-[9px] font-bold text-slate-400 uppercase tracking-tighter flex items-center gap-1">
-                        <Clock size={10} /> Due: {d.due}
-                      </span>
-                   </div>
-                   <p className="text-sm text-slate-600 font-medium leading-relaxed">{d.task}</p>
-                   <div className="mt-4 flex gap-2">
-                       <button className="flex-1 py-2 bg-slate-900 text-white rounded-xl text-[10px] font-black uppercase tracking-widest shadow-lg">Done</button>
-                       <button className="px-4 py-2 border border-slate-100 rounded-xl text-slate-400"><MoreVertical size={16} /></button>
-                   </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
+    <div className="max-w-md mx-auto min-h-screen bg-gray-50 flex flex-col relative overflow-x-hidden text-gray-900 font-sans">
+      <SideMenu />
+      <main className="flex-1 overflow-y-auto scrollbar-hide">
+        {activeView === "dashboard" && <Dashboard />}
+        {activeView === "attendance" && <AttendancePage />}
+        {activeView === "testSeries" && <TestSeriesPage />}
+        {activeView === "diary" && <DiaryPage />}
+        {activeView === "timeTable" && <TimeTablePage />}
+        {activeView === "noticeBoard" && <NoticeBoardPage />}
+        {activeView === "progress" && <ProgressPage />}
+        {activeView === "leaves" && <LeavesPage />}
+        {activeView === "challans" && <ChallansPage />}
+        {activeView === "contact" && <ContactPage />}
+        {activeView === "notifications" && <NotificationsPage />}
       </main>
-
-      {/* --- Bespoke Bottom Indicator (Section 4) --- */}
-      <footer className="absolute bottom-8 left-8 right-8 z-50">
-        <div className="bg-slate-950 rounded-[35px] grid grid-cols-3 p-2 shadow-2xl border border-white/5">
-          {[
-            { id: "home", label: "Dashboard", icon: BarChart3 },
-            { id: "notices", label: "Notices", icon: Bell },
-            { id: "profile", label: "Student", icon: User }
-          ].map((item) => (
-            <button
-              key={item.id}
-              onClick={() => setActiveView(item.id === "profile" ? "home" : item.id)}
-              className={`flex flex-col items-center justify-center py-2.5 rounded-[28px] transition-all duration-500 ${activeView === item.id || (item.id === 'home' && (activeView === 'home' || activeView === 'attendance' || activeView === 'diary' || activeView === 'fees' || activeView === 'results')) ? 'bg-white text-slate-950 shadow-xl' : 'text-slate-500 hover:text-white'}`}
-            >
-              <item.icon size={20} strokeWidth={2.5} />
-              <span className="text-[9px] font-black uppercase mt-1 tracking-tighter">{item.label}</span>
-            </button>
-          ))}
-        </div>
-      </footer>
-
-      {/* Modern Device Notch */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-white rounded-b-[20px] shadow-sm z-40 border-x border-b border-slate-50 flex items-center justify-center px-4">
-         <div className="w-1.5 h-1.5 rounded-full bg-slate-100 mr-auto"></div>
-         <div className="w-10 h-1 rounded-full bg-slate-100"></div>
-         <div className="w-1.5 h-1.5 rounded-full bg-slate-100 ml-auto"></div>
-      </div>
+      <BottomNav />
     </div>
   );
 }
